@@ -1,10 +1,24 @@
 # TalentIQ Desktop
 
-TalentIQ Desktop is a Tauri + React desktop app for screening PDF resumes with LLM providers. It helps a recruiter or hiring manager choose a CV folder, define a screening rule, run an automated review, preview selected resumes, and export shortlisted contacts to CSV.
+TalentIQ Desktop is a desktop application for AI-assisted resume screening. It helps teams review PDF CVs, apply a configurable hiring prompt, inspect categorized results, preview original resumes, and export shortlisted contacts.
+
+Built with Tauri, React, TypeScript, and Rust, the app is designed for a smooth local desktop workflow rather than a browser-only tool.
+
+## Overview
+
+TalentIQ Desktop supports a complete screening flow inside one app:
+
+- connect an LLM provider
+- load available models
+- select a folder of PDF resumes
+- define candidate selection criteria
+- review `Shortlist`, `HR Review`, and `Weak Match` results
+- preview the original CV file
+- export selected candidates to CSV
 
 ## Screenshots
 
-Add your app screenshots to `docs/screenshots/` using the filenames below and GitHub will render them automatically in this README.
+Store screenshots in `docs/screenshots/` using the filenames below and GitHub will render them automatically.
 
 ### Overview
 ![TalentIQ Overview](docs/screenshots/overview.png)
@@ -18,21 +32,20 @@ Add your app screenshots to `docs/screenshots/` using the filenames below and Gi
 ### Settings
 ![TalentIQ Settings](docs/screenshots/settings.png)
 
-## Features
+## Key Features
 
-- Desktop-first workflow built with Tauri, React, TypeScript, and Rust
-- Screen PDF resumes from a local folder
-- Configure multiple providers from the UI
-- Discover models from supported providers directly in Settings
-- Review candidates by bucket: `Shortlist`, `HR Review`, and `Weak Match`
-- Preview a selected CV in the system PDF viewer
-- Reveal the original CV file in the system file explorer
-- Export selected candidates to CSV with only `name` and `email`
-- Custom desktop window chrome and polished app-style UI
+- Desktop application with a polished custom window chrome
+- PDF resume screening from a local folder
+- Configurable provider profiles from the UI
+- Model discovery for supported providers
+- Candidate result buckets for faster review
+- CV preview in the system PDF viewer
+- Reveal-in-folder support from the results list
+- CSV export containing only `name` and `email`
 
 ## Supported Providers
 
-The app currently includes presets for:
+TalentIQ Desktop currently includes presets for:
 
 - `Groq`
 - `OpenAI`
@@ -42,60 +55,49 @@ The app currently includes presets for:
 - `OpenRouter`
 - `Custom Endpoint`
 
-Most providers use OpenAI-compatible APIs. `Ollama Cloud` uses Ollama's cloud endpoints.
-
-## How It Works
-
-1. Open the app.
-2. Go to `Settings` and configure a provider.
-3. Optionally load the provider's available models and pick one.
-4. Go to `Pipeline`.
-5. Choose a folder that contains PDF resumes.
-6. Write the hiring rule or candidate selection prompt.
-7. Start screening.
-8. Review the result buckets in `Results`.
-9. Preview CVs or export selected candidates to CSV.
+Most providers use OpenAI-compatible APIs. `Ollama Cloud` is handled with its provider-specific API flow.
 
 ## Tech Stack
 
-- Frontend: React 19, TypeScript, Vite
-- Desktop shell: Tauri 2
-- Backend: Rust
-- PDF text extraction: `pdf-extract`
-- HTTP client: `reqwest`
+- `Tauri 2`
+- `React 19`
+- `TypeScript`
+- `Vite`
+- `Rust`
+- `reqwest`
+- `pdf-extract`
 
 ## Project Structure
 
-The project is now split into focused frontend and backend modules.
-
 ```text
 src/
-  components/     Reusable UI building blocks
-  config/         Provider presets and app constants
-  sections/       Main app screens
-  types/          Shared frontend TypeScript types
+  components/     Reusable UI components
+  config/         Provider presets and application constants
+  sections/       Main application views
+  types/          Shared frontend types
   utils/          Frontend helpers
-  App.tsx         App coordinator
+  App.tsx         Frontend app coordinator
 
 src-tauri/src/
   commands/       Tauri commands exposed to the frontend
-  screening/      Resume screening and provider communication logic
+  screening/      Resume screening and provider request logic
   models.rs       Shared Rust data models
-  lib.rs          Tauri app wiring
+  lib.rs          Tauri application wiring
   main.rs         Desktop entry point
 ```
 
-## Local Development
+## Getting Started
 
 ### Prerequisites
 
-Install the usual Tauri prerequisites for your platform, plus:
+Make sure the following are installed:
 
 - Node.js
 - npm
 - Rust toolchain
+- Tauri platform prerequisites for your operating system
 
-On Windows, make sure the Rust/MSVC build tools required by Tauri are installed.
+On Windows, that generally means the Rust MSVC toolchain and the required native build tools for Tauri.
 
 ### Install dependencies
 
@@ -103,33 +105,60 @@ On Windows, make sure the Rust/MSVC build tools required by Tauri are installed.
 npm install
 ```
 
-### Run the app in development
+### Run in development
 
 ```bash
 npm run tauri dev
 ```
 
-This starts the Vite dev server on `http://localhost:3000` and launches the Tauri desktop window.
+The development app uses the Vite dev server on `http://localhost:3000`.
 
-## Build the Desktop App
+## Building the Desktop App
 
-To create a production build:
+Create a production build with:
 
 ```bash
 npm run tauri build
 ```
 
-On Windows, the installer is typically generated under:
+On Windows, the generated installer is typically located in:
 
 ```text
 src-tauri/target/release/bundle/nsis/
 ```
 
-You can share the generated `setup.exe` with other users.
+This output can be shared as a standard Windows installer.
 
-## Adding Your Own Screenshots
+## Provider Configuration
 
-Place your images in:
+### OpenAI, Groq, Gemini, DeepSeek, OpenRouter
+
+- enter the API key in `Settings`
+- choose a model manually or load available models
+- confirm the base endpoint if you use a custom gateway
+
+### Ollama Cloud
+
+- enter your Ollama Cloud API key
+- keep the default base endpoint unless you are using another hosted compatible endpoint
+- load available models from the app, then select one
+
+### Custom Endpoint
+
+Use the custom preset for internal gateways or any OpenAI-compatible API service.
+
+## Export Format
+
+CSV export currently includes:
+
+- `name`
+- `email`
+
+This keeps exported output lightweight for recruiter follow-up workflows.
+
+## Screenshot Setup
+
+Place screenshots in:
 
 ```text
 docs/screenshots/
@@ -142,56 +171,17 @@ Recommended filenames:
 - `results.png`
 - `settings.png`
 
-Tips:
+## Available Scripts
 
-- Use PNG format for UI screenshots
-- Try to capture the app at a clean, readable size
-- Replace the example files with your own real screenshots before publishing
+- `npm run dev` starts the Vite frontend
+- `npm run build` builds the frontend
+- `npm run preview` previews the built frontend
+- `npm run tauri dev` runs the desktop app in development
+- `npm run tauri build` creates a production desktop build
 
-## Provider Setup Notes
+## Publishing to GitHub
 
-### OpenAI / Groq / Gemini / DeepSeek / OpenRouter
-
-- Add your API key in `Settings`
-- Choose the model you want
-- Use `Load Models` when supported
-
-### Ollama Cloud
-
-- Use your Ollama Cloud API key
-- Keep the base endpoint pointed at `https://ollama.com` unless you are using a different hosted compatible endpoint
-- Load models from the app, then choose one
-
-### Custom Endpoint
-
-Use this when you have your own OpenAI-compatible API server or an internal gateway.
-
-## Export Format
-
-The CSV export currently includes only:
-
-- `name`
-- `email`
-
-This keeps the export simple for recruiter follow-up workflows.
-
-## Notes
-
-- The app expects resumes in PDF format.
-- CV preview opens the file with the operating system's default PDF viewer.
-- Different providers may return different quality of screening results depending on the prompt and model.
-
-## Scripts
-
-- `npm run dev` - start the Vite frontend
-- `npm run build` - build the frontend
-- `npm run preview` - preview the built frontend
-- `npm run tauri dev` - run the desktop app in development
-- `npm run tauri build` - create a production desktop build
-
-## Recommended Git Workflow
-
-If you want to publish this project to GitHub:
+If this project is not yet connected to a Git repository:
 
 ```bash
 git init
@@ -202,14 +192,12 @@ git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
 git push -u origin main
 ```
 
-## Future Improvements
+## Notes
 
-- Inline PDF preview inside the app
-- Batch export options
-- Saved prompt templates
-- Better candidate profile extraction
-- More provider-specific health checks
+- The app expects resume files in PDF format.
+- CV preview opens the file in the operating system's default PDF viewer.
+- Screening quality depends on the selected model and the clarity of the hiring prompt.
 
 ## License
 
-Add your preferred license here before publishing publicly.
+Add your preferred license before publishing the project publicly.
