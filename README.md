@@ -1,71 +1,125 @@
 # TalentIQ Desktop
 
-TalentIQ Desktop is a desktop application for AI-assisted resume screening. It helps teams review PDF CVs, apply a configurable hiring prompt, inspect categorized results, preview original resumes, and export shortlisted contacts.
+AI-assisted desktop workspace for screening, reviewing, and exporting candidate resumes.
 
-Built with Tauri, React, TypeScript, and Rust, the app is designed for a smooth local desktop workflow rather than a browser-only tool.
+TalentIQ Desktop is a local-first resume screening application built with Tauri, React, TypeScript, and Rust. It helps recruiters and hiring teams process PDF resumes using configurable AI-powered screening workflows while keeping the experience fast and desktop-focused.
 
-## Overview
+---
 
-TalentIQ Desktop supports a complete screening flow inside one app:
+## Features
 
-- connect an LLM provider
-- load available models
-- select a folder of PDF resumes
-- define candidate selection criteria
-- review `Shortlist`, `HR Review`, and `Weak Match` results
-- preview the original CV file
-- export selected candidates to CSV
+- AI-assisted candidate screening using customizable hiring prompts
+- Local PDF resume processing workflow
+- Categorized candidate review pipeline:
+  - `Shortlist`
+  - `HR Review`
+  - `Weak Match`
+- Multi-provider LLM support
+- Runtime model discovery for supported providers
+- Resume preview using the system PDF viewer
+- Reveal resume location directly from the app
+- CSV export for shortlisted candidates
+- Modern desktop UI with custom window chrome
+
+---
+
+## Screening Workflow
+
+TalentIQ Desktop follows a structured screening pipeline:
+
+```text
+PDF Resume
+   ↓
+Text Extraction
+   ↓
+Candidate Profile Extraction
+   ↓
+AI-Based Criteria Assessment
+   ↓
+Score & Recommendation
+   ↓
+Categorized Review Pipeline
+```
+
+The application extracts structured candidate information from resumes, compares it against recruiter-defined hiring requirements, and generates a recommendation with supporting reasoning.
+
+---
+
+## Candidate Categories
+
+### Shortlist
+
+Strong candidate match based on the provided hiring criteria.
+
+### HR Review
+
+Borderline candidates, unclear resumes, or partially matched profiles that require manual review.
+
+### Weak Match
+
+Candidates with low alignment to the hiring requirements.
+
+---
 
 ## Screenshots
 
-Store screenshots in `docs/screenshots/` using the filenames below and GitHub will render them automatically.
+Store screenshots in:
+
+```text
+docs/screenshots/
+```
 
 ### Overview
+
 ![TalentIQ Overview](docs/screenshots/overview.png)
 
 ### Pipeline
+
 ![TalentIQ Pipeline](docs/screenshots/pipeline.png)
 
 ### Results
+
 ![TalentIQ Results](docs/screenshots/results.png)
 
 ### Settings
+
 ![TalentIQ Settings](docs/screenshots/settings.png)
 
-## Key Features
-
-- Desktop application with a polished custom window chrome
-- PDF resume screening from a local folder
-- Configurable provider profiles from the UI
-- Model discovery for supported providers
-- Candidate result buckets for faster review
-- CV preview in the system PDF viewer
-- Reveal-in-folder support from the results list
-- CSV export containing only `name` and `email`
+---
 
 ## Supported Providers
 
-TalentIQ Desktop currently includes presets for:
+TalentIQ Desktop currently supports:
 
 - `Groq`
 - `OpenAI`
 - `Gemini`
 - `DeepSeek`
-- `Ollama Cloud`
 - `OpenRouter`
+- `Ollama Cloud`
 - `Custom Endpoint`
 
-Most providers use OpenAI-compatible APIs. `Ollama Cloud` is handled with its provider-specific API flow.
+Most providers use OpenAI-compatible APIs.  
+`Custom Endpoint` can be used for internal gateways or third-party compatible services.
+
+---
 
 ## Tech Stack
 
-- `Tauri 2`
-- `React 19`
-- `TypeScript`
-- `Vite`
-- `Rust`
-- `reqwest`
-- `pdf-extract`
+### Frontend
+
+- React 19
+- TypeScript
+- Vite
+
+### Backend
+
+- Rust
+- Tauri 2
+- reqwest
+- pdf-extract
+
+---
 
 ## Project Structure
 
@@ -75,8 +129,8 @@ src/
   config/         Provider presets and application constants
   sections/       Main application views
   types/          Shared frontend types
-  utils/          Frontend helpers
-  App.tsx         Frontend app coordinator
+  utils/          Frontend helper functions
+  App.tsx         Frontend application coordinator
 
 src-tauri/src/
   commands/       Tauri commands exposed to the frontend
@@ -86,101 +140,137 @@ src-tauri/src/
   main.rs         Desktop entry point
 ```
 
+---
+
 ## Getting Started
 
 ### Prerequisites
 
-Make sure the following are installed:
+Install the following before running the project:
 
 - Node.js
 - npm
 - Rust toolchain
-- Tauri platform prerequisites for your operating system
+- Tauri platform prerequisites
 
-On Windows, that generally means the Rust MSVC toolchain and the required native build tools for Tauri.
+On Windows, this generally includes:
 
-### Install dependencies
+- Rust MSVC toolchain
+- Visual Studio Build Tools
+
+---
+
+## Installation
+
+Install frontend dependencies:
 
 ```bash
 npm install
 ```
 
-### Run in development
+---
+
+## Development
+
+Run the application in development mode:
 
 ```bash
 npm run tauri dev
 ```
 
-The development app uses the Vite dev server on `http://localhost:3000`.
+The frontend development server runs on:
 
-## Building the Desktop App
+```text
+http://localhost:3000
+```
 
-Create a production build with:
+---
+
+## Production Build
+
+Create a production desktop build:
 
 ```bash
 npm run tauri build
 ```
 
-On Windows, the generated installer is typically located in:
+On Windows, the generated installer is usually located at:
 
 ```text
 src-tauri/target/release/bundle/nsis/
 ```
 
-This output can be shared as a standard Windows installer.
+---
 
 ## Provider Configuration
 
 ### OpenAI, Groq, Gemini, DeepSeek, OpenRouter
 
-- enter the API key in `Settings`
-- choose a model manually or load available models
-- confirm the base endpoint if you use a custom gateway
+1. Open the `Settings` section
+2. Enter the provider API key
+3. Load available models
+4. Select the desired model
+5. Confirm or customize the endpoint if required
 
 ### Ollama Cloud
 
-- enter your Ollama Cloud API key
-- keep the default base endpoint unless you are using another hosted compatible endpoint
-- load available models from the app, then select one
+1. Enter the Ollama Cloud API key
+2. Keep the default endpoint unless using another hosted service
+3. Load available models from the app
+4. Select a model
 
 ### Custom Endpoint
 
-Use the custom preset for internal gateways or any OpenAI-compatible API service.
+Use the custom provider for:
 
-## Export Format
+- internal AI gateways
+- self-hosted services
+- OpenAI-compatible third-party APIs
 
-CSV export currently includes:
+---
+
+## CSV Export
+
+Exported CSV files currently include:
 
 - `name`
 - `email`
 
-This keeps exported output lightweight for recruiter follow-up workflows.
+This keeps recruiter follow-up workflows lightweight and clean.
 
-## Screenshot Setup
-
-Place screenshots in:
-
-```text
-docs/screenshots/
-```
-
-Recommended filenames:
-
-- `overview.png`
-- `pipeline.png`
-- `results.png`
-- `settings.png`
+---
 
 ## Available Scripts
 
-- `npm run dev` starts the Vite frontend
-- `npm run build` builds the frontend
-- `npm run preview` previews the built frontend
-- `npm run tauri dev` runs the desktop app in development
-- `npm run tauri build` creates a production desktop build
+### Frontend
+
+```bash
+npm run dev
+npm run build
+npm run preview
+```
+
+### Desktop Application
+
+```bash
+npm run tauri dev
+npm run tauri build
+```
+
+---
 
 ## Notes
 
-- The app expects resume files in PDF format.
-- CV preview opens the file in the operating system's default PDF viewer.
-- Screening quality depends on the selected model and the clarity of the hiring prompt.
+- Resume files must be in PDF format.
+- Resume preview uses the operating system's default PDF viewer.
+- Screening quality depends on:
+  - selected model
+  - provider quality
+  - clarity of the hiring prompt
+  - PDF text quality
+
+---
+
+## Disclaimer
+
+TalentIQ Desktop is designed to assist recruiter workflows and accelerate resume review processes. Final hiring decisions should always involve human evaluation and review.
