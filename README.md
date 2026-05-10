@@ -179,25 +179,8 @@ Recommended filenames:
 - `npm run tauri dev` runs the desktop app in development
 - `npm run tauri build` creates a production desktop build
 
-## Publishing to GitHub
-
-If this project is not yet connected to a Git repository:
-
-```bash
-git init
-git branch -M main
-git add .
-git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-git push -u origin main
-```
-
 ## Notes
 
 - The app expects resume files in PDF format.
 - CV preview opens the file in the operating system's default PDF viewer.
 - Screening quality depends on the selected model and the clarity of the hiring prompt.
-
-## License
-
-Add your preferred license before publishing the project publicly.
