@@ -2,6 +2,22 @@
 
 TalentIQ Desktop is a Tauri + React desktop app for screening PDF resumes with LLM providers. It helps a recruiter or hiring manager choose a CV folder, define a screening rule, run an automated review, preview selected resumes, and export shortlisted contacts to CSV.
 
+## Screenshots
+
+Add your app screenshots to `docs/screenshots/` using the filenames below and GitHub will render them automatically in this README.
+
+### Overview
+![TalentIQ Overview](docs/screenshots/overview.png)
+
+### Pipeline
+![TalentIQ Pipeline](docs/screenshots/pipeline.png)
+
+### Results
+![TalentIQ Results](docs/screenshots/results.png)
+
+### Settings
+![TalentIQ Settings](docs/screenshots/settings.png)
+
 ## Features
 
 - Desktop-first workflow built with Tauri, React, TypeScript, and Rust
@@ -110,6 +126,27 @@ src-tauri/target/release/bundle/nsis/
 ```
 
 You can share the generated `setup.exe` with other users.
+
+## Adding Your Own Screenshots
+
+Place your images in:
+
+```text
+docs/screenshots/
+```
+
+Recommended filenames:
+
+- `overview.png`
+- `pipeline.png`
+- `results.png`
+- `settings.png`
+
+Tips:
+
+- Use PNG format for UI screenshots
+- Try to capture the app at a clean, readable size
+- Replace the example files with your own real screenshots before publishing
 
 ## Provider Setup Notes
 
